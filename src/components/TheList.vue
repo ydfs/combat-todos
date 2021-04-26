@@ -1,17 +1,38 @@
 <template>
   <section class="main">
-    <input id="toggle-all" class="toggle-all" type="checkbox" v-model="allCompleted">
-      <label for="toggle-all">Mark all as complete</label>
-        <ul class="todo-list">
-          <li :class="['todo', {completed: todo.completed === true},{editing: editTodo === todo}]" v-for="(todo,index) in showTodo" :key="index">
-            <div class="view">
-              <input class="toggle" type="checkbox" v-model="todo.completed">
-              <label @dblclick="handleEdit(todo)">{{todo.title}}</label>
-              <button class="destroy" @click="handleRemoveTodo(todo)"></button>
-            </div>
-            <input class="edit" type="text" v-model="todo.title" v-todo-focus="editTodo === todo" @blur="handleEditDone(todo)" @keyup.enter="handleEditDone(todo)" @keyup.esc="handleEditCancel(todo)">
-          </li>
-        </ul>
+    <input
+      id="toggle-all"
+      class="toggle-all"
+      type="checkbox"
+      v-model="allCompleted"
+    />
+    <label for="toggle-all">Mark all as complete</label>
+    <ul class="todo-list">
+      <li
+        :class="[
+          'todo',
+          { completed: todo.completed === true },
+          { editing: editTodo === todo }
+        ]"
+        v-for="(todo, index) in showTodo"
+        :key="index"
+      >
+        <div class="view">
+          <input class="toggle" type="checkbox" v-model="todo.completed" />
+          <label @dblclick="handleEdit(todo)">{{ todo.title }}</label>
+          <button class="destroy" @click="handleRemoveTodo(todo)"></button>
+        </div>
+        <input
+          class="edit"
+          type="text"
+          v-model="todo.title"
+          v-todo-focus="editTodo === todo"
+          @blur="handleEditDone(todo)"
+          @keyup.enter="handleEditDone(todo)"
+          @keyup.esc="handleEditCancel(todo)"
+        />
+      </li>
+    </ul>
   </section>
 </template>
 
@@ -41,9 +62,9 @@ export default {
         if (filter === 'all') {
           return true
         } else if (filter === 'active') {
-          return !data.computed
+          return !data.completed
         } else if (filter === 'completed') {
-          return data.computed
+          return data.completed
         }
       })
     },
@@ -53,7 +74,9 @@ export default {
       },
       set: function (value) {
         const todos = [...this.todos]
-        todos.forEach(data => { data.completed = value })
+        todos.forEach(data => {
+          data.completed = value
+        })
         this.$emit('update:todos', todos)
       }
     }

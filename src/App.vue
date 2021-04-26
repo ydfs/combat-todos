@@ -20,7 +20,8 @@
           </li>
         </ul>
       </section> -->
-      <footer class="footer">
+      <the-footer :todos.sync="todos" :filter.sync="filter"></the-footer>
+      <!-- <footer class="footer">
         <span class="todo-count">
           <strong>3</strong> todo
         </span>
@@ -30,7 +31,7 @@
           <li><a href="#/completed" :class="{selected: filter === 'completed'}" @click="handleChangeFilter('completed')">Completed</a></li>
         </ul>
         <button class="clear-completed" v-show="hasCompleted" @click="handleRemoveAllCompletedTodo">Clear completed</button>
-      </footer>
+      </footer> -->
     </section>
   </div>
 </template>
@@ -40,6 +41,7 @@ import '@/assets/todos-html/base.css'
 import '@/assets/todos-html/index.css'
 import TheHeader from '@/components/TheHeader'
 import TheList from '@/components/TheList'
+import TheFooter from '@/components/TheFooter'
 export default {
   data () {
     return {
@@ -59,71 +61,26 @@ export default {
       filter: 'all'
     }
   },
+  created () {
+    this.fetchFilter()
+  },
+  watch: {
+    $route: 'fetchFilter'
+  },
   methods: {
-    handleEdit (todo) {
-      this.editTodo = todo
-      this.beforeEditCache = todo.title
-    },
-    handleEditDone (todo) {
-      if (todo.title.trim()) {
-        this.editTodo = null
-        this.beforeEditCache = null
-      }
-    },
-    handleEditCancel (todo) {
-      todo.title = this.beforeEditCache
-      this.editTodo = null
-      this.beforeEditCache = null
+    fetchFilter: function () {
+      const filter = this.$route.params.filter
+      // console.log(filter)
+      this.filter = filter
     },
     handleAddTodo (todo) {
       this.todos.push(todo)
-    },
-    handleRemoveTodo (todo) {
-      const index = this.todos.indexOf(todo)
-      this.todos.splice(index, 1)
-    },
-    handleRemoveAllCompletedTodo () {
-      this.todos = this.todos.filter(data => !data.completed)
-    },
-    handleChangeFilter (filter) {
-      this.filter = filter
-    }
-  },
-  directives: {
-    'todo-focus': function (el, binding) {
-      if (binding.value) {
-        el.focus()
-      }
-    }
-  },
-  computed: {
-    allCompleted: {
-      get: function () {
-        return this.todos.every(data => data.completed)
-      },
-      set: function (value) {
-        this.todos.forEach(todo => { todo.completed = value })
-      }
-    },
-    hasCompleted () {
-      return this.todos.some(data => data.completed)
-    },
-    showTodos () {
-      const filter = this.filter
-      return this.todos.filter(data => {
-        if (filter === 'all') {
-          return true
-        } else if (filter === 'active') {
-          return !data.completed
-        } else if (filter === 'completed') {
-          return data.completed
-        }
-      })
     }
   },
   components: {
     'the-header': TheHeader,
-    'the-list': TheList
+    'the-list': TheList,
+    'the-footer': TheFooter
   }
 }
 </script>
