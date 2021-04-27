@@ -61,18 +61,7 @@ export default {
       filter: 'all'
     }
   },
-  created () {
-    this.fetchFilter()
-  },
-  watch: {
-    $route: 'fetchFilter'
-  },
   methods: {
-    fetchFilter: function () {
-      const filter = this.$route.params.filter
-      // console.log(filter)
-      this.filter = filter
-    },
     handleAddTodo (todo) {
       this.todos.push(todo)
     }

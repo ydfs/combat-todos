@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
-// import Layout from './components/Layout'
-import store from './store'
+import store from './store/index'
 
 // Vue.config.devtools = true
 Vue.use(VueRouter)

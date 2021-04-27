@@ -8,12 +8,6 @@
 <script>
 export default {
   name: 'TheHeader',
-  props: {
-    todos: {
-      type: Array,
-      default: () => []
-    }
-  },
   data () {
     return {
       newTodo: ''
@@ -21,7 +15,7 @@ export default {
   },
   methods: {
     addTodo: function () {
-      this.$emit('add-todo', {
+      this.$store.commit('addTodo', {
         title: this.newTodo,
         completed: false
       })

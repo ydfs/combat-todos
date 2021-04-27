@@ -39,16 +39,6 @@
 <script>
 export default {
   name: 'TodoList',
-  props: {
-    todos: {
-      type: Array,
-      default: () => []
-    },
-    filter: {
-      type: String,
-      default: 'all'
-    }
-  },
   data () {
     return {
       beforeEditCache: '',
@@ -56,28 +46,21 @@ export default {
     }
   },
   computed: {
+    todos () {
+      return this.$store.state.todos
+    },
+    filter () {
+      return this.$store.state.filter
+    },
     showTodo: function () {
-      const filter = this.filter
-      return this.todos.filter(data => {
-        if (filter === 'all') {
-          return true
-        } else if (filter === 'active') {
-          return !data.completed
-        } else if (filter === 'completed') {
-          return data.completed
-        }
-      })
+      return this.$store.getters.showTodo
     },
     allCompleted: {
       get: function () {
         return this.todos.every(data => data.completed)
       },
       set: function (value) {
-        const todos = [...this.todos]
-        todos.forEach(data => {
-          data.completed = value
-        })
-        this.$emit('update:todos', todos)
+        this.$store.commit('setAllCompleted', value)
       }
     }
   },
@@ -102,7 +85,6 @@ export default {
       this.beforeEditCache = null
     }
   },
-  // http://vuejs.org/guide/custom-directive.html
   directives: {
     'todo-focus': function (el, binding) {
       if (binding.value) {
