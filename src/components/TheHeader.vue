@@ -15,11 +15,13 @@ export default {
   },
   methods: {
     addTodo: function () {
-      this.$store.commit('addTodo', {
-        title: this.newTodo,
-        completed: false
-      })
-      this.newTodo = ''
+      if (this.newTodo) {
+        this.$store.commit('addTodo', {
+          title: this.newTodo,
+          completed: false
+        })
+        this.newTodo = ''
+      }
     }
   }
 }
